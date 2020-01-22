@@ -6,7 +6,7 @@ require 'tty-prompt'
         data = Yelp.search(term, location)
     end
 
-    # def restaurant_options
+    # def restaurant_option s
     #     prompt = TTY::Prompt.new
     # ​
     #     prompt.select("Which restaurant do you want to look into?") do |menu|

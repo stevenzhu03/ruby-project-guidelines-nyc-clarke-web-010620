@@ -6,7 +6,7 @@ require "optparse"
 class Yelp
 ​
     # API_KEY = ENV["API_KEY"]
-    API_KEY ="6SkpxfmOou1-J6vUmaqqFPT4wtmjGiK1lsue9ZkqUCLqrv6-9k5Hxfhu1yTifwiRoXmF3QZVISyCmBaF0cW4IizoiRzmiBWb_yzkJVFmincW5Csi5YqlYBqx3zQnXnYx"
+    API_KEY =[key]
     
     
     # Constants, do not change these
@@ -19,7 +19,7 @@ class Yelp
     DEFAULT_TERM = "dinner"
     DEFAULT_LOCATION = "San Francisco, CA"
     SEARCH_LIMIT = 5
-    
+
     def self.search(term, location="new york")
       url = "#{API_HOST}#{SEARCH_PATH}"
       params = {
