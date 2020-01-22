@@ -5,5 +5,7 @@ gem "sinatra-activerecord"
 gem "sqlite3"
 gem "pry"
 gem "require_all"
-gem "yelp"
 gem "http"
+gem 'tty-prompt'
+gem 'rake', '12.3.2'
+

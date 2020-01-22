@@ -1,8 +1,25 @@
 # Original Source: https://github.com/Yelp/yelp-fusion/tree/master/fusion/ruby
-
+require "json"
+require "http"
+require "optparse"
+​
 class Yelp
-    # #Returns a parsed json object of the request
-  
+​
+    # API_KEY = ENV["API_KEY"]
+    API_KEY ="6SkpxfmOou1-J6vUmaqqFPT4wtmjGiK1lsue9ZkqUCLqrv6-9k5Hxfhu1yTifwiRoXmF3QZVISyCmBaF0cW4IizoiRzmiBWb_yzkJVFmincW5Csi5YqlYBqx3zQnXnYx"
+    
+    
+    # Constants, do not change these
+    API_HOST = "https://api.yelp.com"
+    SEARCH_PATH = "/v3/businesses/search"
+    BUSINESS_PATH = "/v3/businesses/"  # trailing / because we append the business id to the path
+    
+    
+    DEFAULT_BUSINESS_ID = "yelp-san-francisco"
+    DEFAULT_TERM = "dinner"
+    DEFAULT_LOCATION = "San Francisco, CA"
+    SEARCH_LIMIT = 5
+    
     def self.search(term, location="new york")
       url = "#{API_HOST}#{SEARCH_PATH}"
       params = {
