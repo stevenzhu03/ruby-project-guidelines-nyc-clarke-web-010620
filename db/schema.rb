@@ -17,22 +17,22 @@ ActiveRecord::Schema.define(version: 3) do
   end
 
   create_table "reservations", force: :cascade do |t|
-    t.string  "name_of_customer"
-    t.string  "name_of_restaurant"
+    t.string "name_of_customer"
+    t.string "name_of_restaurant"
     t.integer "number_of_people"
-    t.string  "date"
-    t.string  "time"
+    t.string "date"
+    t.string "time"
     t.integer "customer_id"
     t.integer "restaurant_id"
   end
 
   create_table "restaurants", force: :cascade do |t|
     t.string "name"
-    t.string "cuisine"
+    t.string "type_of_food"
     t.string "location"
     t.string "open_time"
     t.string "close_time"
-    t.float  "rating"
+    t.float "rating"
   end
 
 end

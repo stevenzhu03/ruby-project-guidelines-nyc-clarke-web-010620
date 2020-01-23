@@ -1,8 +1,8 @@
-class MakeRestaurants < ActiveRecord::Migration[4.2]
+class MakeRestaurants < ActiveRecord::Migration[5.2]
     def change
         create_table :restaurants do |t|
             t.string :name
-            t.string :cuisine
+            t.string :type_of_food
             t.string :location
             t.string :open_time
             t.string :close_time

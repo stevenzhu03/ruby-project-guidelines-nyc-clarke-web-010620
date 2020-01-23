@@ -1,23 +1,25 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    activemodel (6.0.2.1)
-      activesupport (= 6.0.2.1)
-    activerecord (6.0.2.1)
-      activemodel (= 6.0.2.1)
-      activesupport (= 6.0.2.1)
-    activesupport (6.0.2.1)
+    activemodel (5.2.4.1)
+      activesupport (= 5.2.4.1)
+    activerecord (5.2.4.1)
+      activemodel (= 5.2.4.1)
+      activesupport (= 5.2.4.1)
+      arel (>= 9.0)
+    activesupport (5.2.4.1)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
-      zeitwerk (~> 2.2)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
+    arel (9.0.0)
     coderay (1.1.2)
     concurrent-ruby (1.1.5)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
+    equatable (0.6.1)
     ffi (1.12.1)
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
@@ -38,6 +40,10 @@ GEM
     minitest (5.14.0)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
+    necromancer (0.5.1)
+    pastel (0.7.3)
+      equatable (~> 0.6)
+      tty-color (~> 0.5)
     pry (0.12.2)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
@@ -59,22 +65,36 @@ GEM
     sqlite3 (1.4.2)
     thread_safe (0.3.6)
     tilt (2.0.10)
+    tty-color (0.5.1)
+    tty-cursor (0.7.0)
+    tty-prompt (0.20.0)
+      necromancer (~> 0.5.0)
+      pastel (~> 0.7.0)
+      tty-reader (~> 0.7.0)
+    tty-reader (0.7.0)
+      tty-cursor (~> 0.7)
+      tty-screen (~> 0.7)
+      wisper (~> 2.0.0)
+    tty-screen (0.7.0)
     tzinfo (1.2.6)
       thread_safe (~> 0.1)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.6)
-    zeitwerk (2.2.2)
+    wisper (2.0.1)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  activerecord (~> 5.2)
   http
   pry
+  rake
   require_all
   sinatra-activerecord
   sqlite3
+  tty-prompt
 
 BUNDLED WITH
-   1.14.6
+   2.1.4
