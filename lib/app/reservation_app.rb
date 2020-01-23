@@ -44,10 +44,17 @@ class ReservationApp
     end 
 
 
+# x = get_choices
 
-    def get_choices1 # getting 3 choices 
+# case x
+# when 1
+# blah blah create
+# when 2
+# modift 
 
-        prompt = TTY::Prompt.new 
+
+    def get_choices # getting 3 choices 
+        prompt = TTY::Prompt.new
 
         selection = prompt.select('How can I help you today?') do |menu|
             menu.default 3
@@ -57,15 +64,16 @@ class ReservationApp
             menu.choice 'Cancel Reservation', 3
         end
 
+        # puts selection
         return selection 
     end 
 
 
 
     def create_resevation #building choice 1
-        prompt = TTY::Prompt.new 
-        case 
-            when get_choices1 = 'Create Reservation'
+        prompt = TTY::Prompt.new
+
+            
             @city_choice = prompt.ask("What city are you dining in?")
             @food_choice = prompt.ask("What kind of food?")
             @number_choice = prompt.ask("For how many people?")
@@ -90,13 +98,13 @@ class ReservationApp
             else 
                 puts "invalid key, try again"
                 runner
-            end 
+        
         end
     end 
 
     def menu_option(data) #Provides menu options for restaurants, allows us to create reservation or go back to list
-    prompt = TTY::Prompt.new 
-    prompt.select('Which restaurant do you want to look into?') do |menu|
+        prompt = TTY::Prompt.new
+        prompt.select('Which restaurant do you want to look into?') do |menu|
         data.map do |restaurant|
             menu.choice restaurant["name"], -> do
                 restaurant_name = restaurant["name"]
@@ -127,67 +135,79 @@ class ReservationApp
     end
 end
 
+
     def modify_reservation
-        prompt = TTY::Prompt.new 
-        case 
-            when get_choices2 = 'Modify Reservation'
-
-
+        puts "hey"
+        prompt = TTY::Prompt.new
+        
+            name = prompt.ask("Under what name is the reservation?")
+            customer = Customer.find_by(name: name)
+            reservation = Reservation.find_by(customer_id: customer.id)
+            prompt.select("Sure #{name} what would you like to change?") do |menu| 
+                menu.choice 'Change time', -> do
+                    puts "Hey #{customer.name} your current reservation is at #{reservation.time}."
+                    new_time = prompt.ask("What time would you like to change it to?")
+                    reservation.update(time: new_time)
+                    puts "Great your reservation at #{reservation.name_of_restaurant} has been rescheduled to #{new_time}."
+                end
+                    
+                menu.choice 'Change number of people', -> do 
+                    puts "Hey #{customer.name} your current reservation is for #{reservation.number_of_people}."
+                    new_number = prompt.ask("For how many people should I update your reservation?")
+                    reservation.update(number_of_people: new_number)
+                    puts "Great your reservation at #{reservation.name_of_restaurant} is now for #{new_number}."
+                end 
+            end 
         end
-    end
-
-
-    def cancel_reservation
-        prompt = TTY::Prompt.new 
-        case 
-            when get_choices2 = 'Modify Reservation'
-
-
-        end
-    end
-    # def restaurant_options
-    #     prompt = TTY::Prompt.new
-
-    #     data = Yelp.search(food_choice, city_choice)
     
-    #     prompt.select('Which restaurant do you want to look into?') do |menu|
-    #         data.map do |restaurant|
-    #             menu.choice restaurant[:name], -> do
-    #                 puts "Here is some info about #{restaurant[:name]}!"
-    #                 # puts "Type of Food: #{restaurant["categories"]}"
-    #                 puts "Location: #{restaurant["location"]["display_address"].join(" ")}"
-    #                 puts "Rating: #{restaurant["rating"]}"
-    
-    #             end
-    #         end
+
+
+    def delete_reservation
+        prompt = TTY::Prompt.new
+        name = prompt.ask("Under what name is the reservation?")
+        customer = Customer.find_by(name: name)
+        if customer 
+        reservation = Reservation.find_by(customer_id: customer.id)
+        prompt.select ("Are you sure?") do |menu|
+            menu.choice 'Yes, cancel my reservation', -> do 
+                reservation.delete
+                puts 'Your reservation was canceled'
+                puts '-----------------------------'
+            end 
+            menu.choice 'No, keep it as scheduled.', -> do 
+                runner
+            end 
+        end 
+        else 
+            puts "No reservation found under #{name}"
+            delete_reservation
+        end 
+    end 
+
+    # def cancel_reservation
+    #     case 
+    #         when get_choices = 'Modify Reservation'
+
+
     #     end
     # end
 
-     ## new method for getting a list  
-
-                #new_customer = Customer.create(name: customer_name)
-                #new_restaurant = Restaurant.create(:name  , :cuisine , :location) => Restaurant table should have city and address 
-                #Reservation.new(:name_of_customer customer_name, restau)
-                
-                # t.string :name_of_customer
-                # t.string :name_of_restaurant
-                # t.integer :number_of_people
-                # t.string :date
-                # t.string :time
-                # t.integer :customer_id
-                # t.integer :restaurant_id
-
-
-    # def update_or_delete_reservation 
-
-    # end 
     
 
 
     def runner
         intro 
-        get_choices1
+
+        selection = get_choices
+
+        if selection == 1
         create_resevation
+        elsif selection == 2
+             modify_reservation
+        else 
+            delete_reservation
+        end 
+        
         # update_or_delete_reservation 
     end 
 
