@@ -20,7 +20,6 @@ ActiveRecord::Schema.define(version: 3) do
     t.string "name_of_customer"
     t.string "name_of_restaurant"
     t.integer "number_of_people"
-    t.string "date"
     t.string "time"
     t.integer "customer_id"
     t.integer "restaurant_id"
@@ -30,8 +29,6 @@ ActiveRecord::Schema.define(version: 3) do
     t.string "name"
     t.string "type_of_food"
     t.string "location"
-    t.string "open_time"
-    t.string "close_time"
     t.float "rating"
   end
 
