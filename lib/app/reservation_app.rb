@@ -204,10 +204,13 @@ class ReservationApp
 
         if selection == 1
         create_resevation
+        runner 
         elsif selection == 2
              modify_reservation
+             runner
         else 
             delete_reservation
+            runner 
         end 
         
     end 
