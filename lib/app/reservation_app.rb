@@ -182,8 +182,17 @@ class ReservationApp
                 end 
             end 
         else 
-            puts "No reservation found under #{name}"
-            delete_reservation
+            prompt.select ("No reservation found under #{name}.\nWould you like to create a reservation?") do |menu|
+                menu.choice 'Yes, I Would Like To Make A Reservation', -> do 
+                    create_resevation
+                end 
+                menu.choice 'No, I Would Not Like to Make A Reservation', -> do 
+                    puts "Ok, have a good day!"
+                end 
+                menu.choice 'Retry', -> do 
+                    delete_reservation
+                end 
+            end 
         end 
     end    
 
