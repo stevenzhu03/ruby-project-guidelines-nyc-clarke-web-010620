@@ -44,7 +44,7 @@ class ReservationApp
     end 
 
 
-
+    
     def get_choices # getting 3 choices 
         prompt = TTY::Prompt.new
 
@@ -168,15 +168,26 @@ class ReservationApp
         customer = Customer.find_by(name: name)
         if customer 
             reservation = Reservation.find_by(customer_id: customer.id)
-            prompt.select ("Are you sure?") do |menu|
-                menu.choice 'Yes, cancel my reservation', -> do 
-                    reservation.delete
-                    puts 'Your reservation was canceled'
-                    puts '-----------------------------'
-                end 
-                menu.choice 'No, keep it as scheduled.', -> do 
-                    runner
-                end 
+            if reservation
+                prompt.select ("Are you sure?") do |menu|
+                    menu.choice 'Yes, cancel my reservation', -> do 
+                        reservation.delete
+                        puts 'Your reservation was canceled'
+                        puts '-----------------------------'
+                    end 
+                    menu.choice 'No, keep it as scheduled.', -> do 
+                        runner
+                    end 
+                end
+            else
+                prompt.select ("No reservation found under that name.\nWould you like to make a new reservation?") do |menu|
+                    menu.choice 'Yes, make a reservation', -> do 
+                        create_resevation
+                    end 
+                    menu.choice 'No, maybe another time.', -> do 
+                        puts "Ok, have a good day"
+                    end 
+                end
             end 
         else 
             puts "No reservation found under #{name}"
