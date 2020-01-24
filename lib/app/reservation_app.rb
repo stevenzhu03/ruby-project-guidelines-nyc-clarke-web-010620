@@ -70,7 +70,7 @@ class ReservationApp
             @food_choice = prompt.ask("What kind of food?")
             @number_choice = prompt.ask("For how many people?")
             @time_choice = prompt.ask("What time?")
-            customer_name = prompt.ask("Under what name should I make this reservation?")
+            customer_name = prompt.ask("Under what name should I make this reservation? (Please enter full name)")
             @customer = Customer.create(name: customer_name)
             
             puts "\nGreat! So you are looking for #{@food_choice} in #{@city_choice} \nfor #{@number_choice} people at #{@time_choice}? (Yes/No)"
@@ -99,18 +99,21 @@ class ReservationApp
 
         prompt.select('Which restaurant do you want to look into?') do |menu|
             data.map do |restaurant|
-                menu.choice restaurant["name"], -> do
+                menu.choice "#{restaurant["name"]} #{restaurant["price"]}", -> do
                     restaurant_name = restaurant["name"]
                     type_of_food = restaurant["categories"][0]["title"]
                     location = restaurant["location"]["display_address"].join(" ")
                     rating = restaurant["rating"]
                     price = restaurant["price"]
+                    phone = restaurant["display_phone"]
+                    review_count = restaurant["review_count"]
                     puts "\nHere is some info about #{restaurant_name}!" 
                     puts "Type of Food: #{type_of_food}"
                     puts "Location: #{location}"
                     puts "Rating: #{rating}"
+                    puts "Review Count: #{review_count}"
                     puts "Price: #{price}"
-                    puts "Phone: #{phone = restaurant["display_phone"]}"
+                    puts "Phone: #{phone}"
                     puts "\n"
                     
                     
@@ -123,7 +126,6 @@ class ReservationApp
                         end
                         menu.choice 'Go Back To Restaurant Options', -> {menu_option(data)}
                     end
-
                 end
             end
         end
@@ -135,28 +137,29 @@ class ReservationApp
         
             name = prompt.ask("Under what name is the reservation?")
             customer = Customer.find_by(name: name)
-            # if customer 
-            reservation = Reservation.find_by(customer_id: customer.id)
+            if customer 
+                reservation = Reservation.find_by(name_of_customer: customer.name)
 
-            prompt.select("Sure #{name} what would you like to change?") do |menu| 
-                menu.choice 'Change time', -> do
-                    puts "Hey #{customer.name} your current reservation is at #{reservation.time}."
-                    new_time = prompt.ask("What time would you like to change it to?")
-                    reservation.update(time: new_time)
-                    puts "Great your reservation at #{reservation.name_of_restaurant} has been rescheduled to #{new_time}."
-                end
-                    
-                menu.choice 'Change number of people', -> do 
-                    puts "Hey #{customer.name} your current reservation is for #{reservation.number_of_people}."
-                    new_number = prompt.ask("For how many people should I update your reservation?")
-                    reservation.update(number_of_people: new_number)
-                    puts "Great your reservation at #{reservation.name_of_restaurant} is now for #{new_number}."
+                prompt.select("Sure #{name} what would you like to change?") do |menu| 
+                    menu.choice 'Change time', -> do
+                        puts "Hey #{customer.name} your current reservation is at #{reservation.time}."
+                        new_time = prompt.ask("What time would you like to change it to?")
+                        reservation.update(time: new_time)
+                        puts "Great your reservation at #{reservation.name_of_restaurant} has been rescheduled to #{new_time}."
+                    end
+                        
+                    menu.choice 'Change number of people', -> do 
+                        puts "Hey #{customer.name} your current reservation is for #{reservation.number_of_people}."
+                        new_number = prompt.ask("For how many people should I update your reservation?")
+                        reservation.update(number_of_people: new_number)
+                        puts "Great your reservation at #{reservation.name_of_restaurant} is now for #{new_number}."
+                    end 
                 end 
+
+            else 
+                puts "No reservation found under #{name}"
+                modify_reservation
             end 
-        # else 
-        #     puts "No reservation found under #{name}"
-        #     modify_reservation
-        # end 
 
     end
     
@@ -164,10 +167,10 @@ class ReservationApp
 
     def delete_reservation
         prompt = TTY::Prompt.new
-        name = prompt.ask("Under what name is the reservation?")
+        name = prompt.ask("Under what name is the reservation? (Case Sensitive)")
         customer = Customer.find_by(name: name)
         if customer 
-            reservation = Reservation.find_by(customer_id: customer.id)
+            reservation = Reservation.find_by(name_of_customer: customer.name)
             prompt.select ("Are you sure?") do |menu|
                 menu.choice 'Yes, cancel my reservation', -> do 
                     reservation.delete
