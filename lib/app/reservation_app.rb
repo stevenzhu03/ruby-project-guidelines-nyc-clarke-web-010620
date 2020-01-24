@@ -104,45 +104,48 @@ class ReservationApp
 
     def menu_option(data) #Provides menu options for restaurants, allows us to create reservation or go back to list
         prompt = TTY::Prompt.new
-        prompt.select('Which restaurant do you want to look into?') do |menu|
-        data.map do |restaurant|
-            menu.choice restaurant["name"], -> do
-                restaurant_name = restaurant["name"]
-                type_of_food = restaurant["categories"][0]["title"]
-                location = restaurant["location"]["display_address"].join(" ")
-                rating = restaurant["rating"]
-                price = restaurant["price"]
-                puts "\nHere is some info about #{restaurant_name}!" 
-                puts "Type of Food: #{type_of_food}"
-                puts "Location: #{location}"
-                puts "Rating: #{rating}"
-                puts "Price: #{price}"
-                puts "Phone: #{phone = restaurant["display_phone"]}"
-                puts "\n"
-                
-                
-                prompt.select('Would you like to make a reservation here?') do |menu|
-                    menu.choice 'Make A Reservation!', -> do
-                    @restaurant = Restaurant.create(name: restaurant_name, type_of_food: type_of_food, location: location, rating: rating)
-                    Reservation.create(name_of_customer: @customer.name, name_of_restaurant: restaurant_name, number_of_people: @number_choice, time: @time_choice, customer_id: @customer.id, restaurant_id: @restaurant.id)
-                    puts "Great, Reservation was successfully made!"
-                    end
-                    menu.choice 'Go Back To Restaurant Options', -> {menu_option(data)}
-                end
 
+        prompt.select('Which restaurant do you want to look into?') do |menu|
+            data.map do |restaurant|
+                menu.choice restaurant["name"], -> do
+                    restaurant_name = restaurant["name"]
+                    type_of_food = restaurant["categories"][0]["title"]
+                    location = restaurant["location"]["display_address"].join(" ")
+                    rating = restaurant["rating"]
+                    price = restaurant["price"]
+                    puts "\nHere is some info about #{restaurant_name}!" 
+                    puts "Type of Food: #{type_of_food}"
+                    puts "Location: #{location}"
+                    puts "Rating: #{rating}"
+                    puts "Price: #{price}"
+                    puts "Phone: #{phone = restaurant["display_phone"]}"
+                    puts "\n"
+                    
+                    
+                    prompt.select('Would you like to make a reservation here?') do |menu|
+                        menu.choice 'Make A Reservation!', -> do
+                        @restaurant = Restaurant.create(name: restaurant_name, type_of_food: type_of_food, location: location, rating: rating)
+                        Reservation.create(name_of_customer: @customer.name, name_of_restaurant: restaurant_name, number_of_people: @number_choice, time: @time_choice, customer_id: @customer.id, restaurant_id: @restaurant.id)
+                        puts "Great, Reservation was successfully made!"
+                        # runner 
+                        end
+                        menu.choice 'Go Back To Restaurant Options', -> {menu_option(data)}
+                    end
+
+                end
             end
         end
     end
-end
 
 
     def modify_reservation
-        puts "hey"
         prompt = TTY::Prompt.new
         
             name = prompt.ask("Under what name is the reservation?")
             customer = Customer.find_by(name: name)
+            # if customer 
             reservation = Reservation.find_by(customer_id: customer.id)
+
             prompt.select("Sure #{name} what would you like to change?") do |menu| 
                 menu.choice 'Change time', -> do
                     puts "Hey #{customer.name} your current reservation is at #{reservation.time}."
@@ -158,7 +161,12 @@ end
                     puts "Great your reservation at #{reservation.name_of_restaurant} is now for #{new_number}."
                 end 
             end 
-        end
+        # else 
+        #     puts "No reservation found under #{name}"
+        #     modify_reservation
+        # end 
+
+    end
     
 
 
@@ -167,32 +175,22 @@ end
         name = prompt.ask("Under what name is the reservation?")
         customer = Customer.find_by(name: name)
         if customer 
-        reservation = Reservation.find_by(customer_id: customer.id)
-        prompt.select ("Are you sure?") do |menu|
-            menu.choice 'Yes, cancel my reservation', -> do 
-                reservation.delete
-                puts 'Your reservation was canceled'
-                puts '-----------------------------'
+            reservation = Reservation.find_by(customer_id: customer.id)
+            prompt.select ("Are you sure?") do |menu|
+                menu.choice 'Yes, cancel my reservation', -> do 
+                    reservation.delete
+                    puts 'Your reservation was canceled'
+                    puts '-----------------------------'
+                end 
+                menu.choice 'No, keep it as scheduled.', -> do 
+                    runner
+                end 
             end 
-            menu.choice 'No, keep it as scheduled.', -> do 
-                runner
-            end 
-        end 
         else 
             puts "No reservation found under #{name}"
             delete_reservation
         end 
-    end 
-
-    # def cancel_reservation
-    #     case 
-    #         when get_choices = 'Modify Reservation'
-
-
-    #     end
-    # end
-
-    
+    end    
 
 
     def runner
@@ -208,7 +206,6 @@ end
             delete_reservation
         end 
         
-        # update_or_delete_reservation 
     end 
 
 end

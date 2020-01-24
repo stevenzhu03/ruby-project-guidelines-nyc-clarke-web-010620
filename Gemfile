@@ -10,4 +10,5 @@ gem "require_all"
 gem "http"
 gem 'tty-prompt'
 gem 'rake'
+gem 'figaro'
 

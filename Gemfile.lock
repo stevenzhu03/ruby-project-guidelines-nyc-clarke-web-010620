@@ -24,6 +24,8 @@ GEM
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
       rake
+    figaro (1.1.1)
+      thor (~> 0.14)
     http (4.3.0)
       addressable (~> 2.3)
       http-cookie (~> 1.0)
@@ -63,6 +65,7 @@ GEM
       activerecord (>= 3.2)
       sinatra (>= 1.0)
     sqlite3 (1.4.2)
+    thor (0.20.3)
     thread_safe (0.3.6)
     tilt (2.0.10)
     tty-color (0.5.1)
@@ -88,6 +91,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord (~> 5.2)
+  figaro
   http
   pry
   rake
